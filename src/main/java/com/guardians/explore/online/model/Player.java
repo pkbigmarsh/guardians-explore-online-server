@@ -7,11 +7,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Player {
 	private final String username;
-	private final String socketId; // This probably won't be a string, but I don't know what it needs to be right now
+	private String socketId; // This probably won't be a string, but I don't know what it needs to be right now
+
+    private static final String NULL_EMPTY_USERNAME_ERROR = "Player's username cannot be null or empty";
+    private static final String NULL_EMPTY_SOCKET_ID_ERROR = "Player's socket id cannot be null or empty";
 
 	private Player(Builder builder) {
-		this.username = Validate.notEmpty(builder.username, "Player's username cannot be null or empty");
-		this.socketId = Validate.notEmpty(builder.socketId, "Player's socket id cannot be null or empty");
+		this.username = Validate.notEmpty(builder.username, NULL_EMPTY_USERNAME_ERROR);
+
+        if (builder.socketId != null) {
+            this.setSocketId(builder.socketId);
+        }
 	}
 
 	public String getUsername() {
@@ -21,6 +27,14 @@ public class Player {
 	public String getSocketId() {
 		return this.socketId;
 	}
+
+	public void setSocketId(String socketId) {
+	    this.socketId = Validate.notEmpty(socketId, NULL_EMPTY_SOCKET_ID_ERROR);
+    }
+
+    public void removeSocketId() {
+        this.socketId = null;
+    }
 
 	public static Builder builder() {
 		return new Builder();

@@ -1,5 +1,7 @@
 package com.guardians.explore.online.model.framework;
 
+import com.guardians.explore.online.model.Player;
+
 public class PlayerTestFramework {
     private static final String VALID_USERNAME = "username";
     private static final String VALID_SOCKET_ID = "socket_id";
@@ -7,7 +9,7 @@ public class PlayerTestFramework {
     private static final String STRING_MODIFIER = "_string";
 
     private static final String USERNAME_CONSTRUCTOR_ERROR_MESSAGE = "Player's username cannot be null or empty";
-    private static final String SOCKET_ID_CONSTRUCTOR_ERROR_MESSAGE = "Player's socket id cannot be null or empty";
+    private static final String SOCKET_ID_SETTER_ERROR_MESSAGE = "Player's socket id cannot be null or empty";
 
 
     protected String getValidUsername() {
@@ -22,8 +24,8 @@ public class PlayerTestFramework {
         return USERNAME_CONSTRUCTOR_ERROR_MESSAGE;
     }
 
-    protected String getSocketIdConstructorErrorMessage() {
-        return SOCKET_ID_CONSTRUCTOR_ERROR_MESSAGE;
+    protected String getSocketIdSetterErrorMessage() {
+        return SOCKET_ID_SETTER_ERROR_MESSAGE;
     }
 
     protected String getEmptyString() {
@@ -32,5 +34,11 @@ public class PlayerTestFramework {
 
     protected String getStringModifier() {
         return STRING_MODIFIER;
+    }
+
+    protected Player newInsance() {
+        return Player.builder()
+                .setUsername(VALID_USERNAME)
+                .build();
     }
 }

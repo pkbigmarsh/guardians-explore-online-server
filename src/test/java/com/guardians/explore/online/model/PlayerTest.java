@@ -12,8 +12,24 @@ public class PlayerTest extends PlayerTestFramework {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void validConstructor() {
-        // Given a valid username and a valid socketId
+    public void minimalConstructor() {
+        // Given a valid username
+        final String username = getValidUsername();
+
+        // When using the Player.Builder to construct a new Player instance
+        final Player player = Player.builder()
+                .setUsername(username)
+                .build();
+
+        // Then the Object will be created successfully
+        Assert.assertNotNull("The builder failed to construct a new Player", player);
+        Assert.assertEquals("The new Player instance did not have the correct username",
+                username, player.getUsername());
+    }
+
+    @Test
+    public void fullConstructor() {
+        // Given a valid user and a valid socked it
         final String username = getValidUsername();
         final String socketId = getValidSocketId();
 
@@ -25,14 +41,17 @@ public class PlayerTest extends PlayerTestFramework {
 
         // Then the Object will be created successfully
         Assert.assertNotNull("The builder failed to construct a new Player", player);
+        Assert.assertEquals("The new Player instance did not have the correct username",
+                username, player.getUsername());
+        Assert.assertEquals("The new Player instance did not have the correct socketId",
+                socketId, player.getSocketId());
     }
 
     @Test
     public void nullUsernameConstructor() {
         thrown.expect(NullPointerException.class);
-        thrown.expectMessage(getUsernameConstructorErrorMessage());
 
-        // Given a null username and a valid socketId
+        // Given a null username
         final String username = null;
         final String socketId = getValidSocketId();
 
@@ -48,39 +67,17 @@ public class PlayerTest extends PlayerTestFramework {
     }
 
     @Test
-    public void nullSocketIdConstructor() {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage(getSocketIdConstructorErrorMessage());
-
-        // Given a valid username and a null socketId
-        final String username = getValidUsername();
-        final String socketId = null;
-
-        // When using the Player.Builder to construct a new Player instance
-        @SuppressWarnings("unused")
-        final Player player = Player.builder()
-                .setUsername(username)
-                .setSocketId(socketId)
-                .build();
-
-        // Then the Builder will throw a NullPointerException with the message
-        // Player's socket id cannot be null or empty
-    }
-
-    @Test
     public void emptyUsernameConstructor() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage(getUsernameConstructorErrorMessage());
 
-        // Given an empty username and a valid socketId
+        // Given an empty username
         final String username = getEmptyString();
-        final String socketId = getValidSocketId();
 
         // When using the Player.Builder to construct a new Player instance
         @SuppressWarnings("unused")
         final Player player = Player.builder()
                 .setUsername(username)
-                .setSocketId(socketId)
                 .build();
 
         // Then the Builder will throw a IllegalArgumentException with the message
@@ -88,11 +85,11 @@ public class PlayerTest extends PlayerTestFramework {
     }
 
     @Test
-    public void emptySocketIdConstructor() {
+    public void emptyStringSocketIdConstructor() {
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(getSocketIdConstructorErrorMessage());
+        thrown.expectMessage(getSocketIdSetterErrorMessage());
 
-        // Given a valid username and an empty socketId
+        // Given a valid username and an empty string socket id
         final String username = getValidUsername();
         final String socketId = getEmptyString();
 
@@ -104,7 +101,53 @@ public class PlayerTest extends PlayerTestFramework {
                 .build();
 
         // Then the Builder will throw an IllegalArgumentException with the message
+        // Player's socket id cannot be null or empty
+    }
+
+    @Test
+    public void setSocketId() {
+        // Given a valid Player instance and a valid socket id
+        final Player player = newInsance();
+        final String socketId = getValidSocketId();
+
+        // When calling Player.setSocketId()
+        player.setSocketId(socketId);
+
+        // Then the players socket id will be set correctly
+        Assert.assertEquals("The Player's socket id was set incorrectly",
+                socketId, player.getSocketId());
+    }
+
+    @Test
+    public void emptySocketIdConstructor() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage(getSocketIdSetterErrorMessage());
+
+        // Given a valid Player and an empty socket id
+        final Player player = newInsance();
+        final String socketId = getEmptyString();
+
+        // When calling Player.setSocketId
+        player.setSocketId(socketId);
+
+        // Then an IllegalArgumentException will be thrown with the message
         // Player's username cannot be null or empty
+    }
+
+    @Test
+    public void nullSocketIdConstructor() {
+        thrown.expect(NullPointerException.class);
+        thrown.expectMessage(getSocketIdSetterErrorMessage());
+
+        // Given a valid Player instance and a null socketId
+        final Player player = newInsance();
+        final String socketId = null;
+
+        // When calling Player.setSocketId
+        player.setSocketId(socketId);
+
+        // Then the Builder will throw a NullPointerException with the message
+        // Player's socket id cannot be null or empty
     }
 
     @Test
@@ -113,33 +156,14 @@ public class PlayerTest extends PlayerTestFramework {
         thrown.expectMessage(getUsernameConstructorErrorMessage());
 
         // Given a valid socketId
-        final String socketId = getValidSocketId();
 
         // When using the Player.Builder to construct a new Player instance
         @SuppressWarnings("unused")
         Player player = Player.builder()
-                .setSocketId(socketId)
                 .build();
 
         // Then the Builder will throw a NullPointerException with the message
         // Player's username cannot be null or empty
-    }
-
-    @Test
-    public void noSocketIdConstructor() {
-        thrown.expect(NullPointerException.class);
-        thrown.expectMessage(getSocketIdConstructorErrorMessage());
-
-        // Given a valid username
-        final String username = getValidUsername();
-
-        // When using the Player.Builder to construct a new Player instance
-        Player player = Player.builder()
-                .setUsername(username)
-                .build();
-
-        // Then the Builder will throw a NullPointerException with the massage
-        // Player's socketId cannot be null or empty
     }
 
     @Test
