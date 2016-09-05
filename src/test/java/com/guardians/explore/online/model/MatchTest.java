@@ -42,15 +42,15 @@ public class MatchTest extends MatchTestFramework {
     }
 
     @Test
-    public void getGameId() {
+    public void getMatchId() {
         // Given a new instance of a Match
         final Match match = newInstance();
 
-        // When calling getGameId()
-        final UUID gameId = match.getGameId();
+        // When calling getMatchId()
+        final UUID matchId = match.getMatchId();
 
         // Then a valid UUID will be returned
-        Assert.assertNotNull("New match failed to create a GameId", gameId);
+        Assert.assertNotNull("New match failed to create a MatchId", matchId);
     }
 
     @Test
@@ -110,7 +110,7 @@ public class MatchTest extends MatchTestFramework {
         // When calling equals
         final boolean equals = match1.equals(match2);
 
-        // Then the two will not be equal because of differing gameIds
+        // Then the two will not be equal because of differing matchIds
         Assert.assertFalse("The two Matches were equal when they should not be", equals);
     }
 
