@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class MatchIsFullException extends RuntimeException{
-    private static final String ERROR_MESSAGE_FORMAT = "Match [%s] is already full";
+    public static final String ERROR_MESSAGE_FORMAT = "Match [%s] is already full";
 
     public MatchIsFullException(UUID matchId) {
         super(String.format(ERROR_MESSAGE_FORMAT, matchId.toString()));

@@ -1,5 +1,6 @@
 package com.guardians.explore.online.model;
 
+import com.guardians.explore.online.exception.MatchIsFullException;
 import com.guardians.explore.online.model.framework.MatchTestFramework;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -155,5 +156,57 @@ public class MatchTest extends MatchTestFramework {
         // Then the two hashCodes will be different
         Assert.assertNotEquals("The two Matches hash codes are equal when they should not be",
                 hashCode1, hashCode2);
+    }
+
+    @Test
+    public void getFirstPlayer() {
+        // Given valid Player instance and a newly created Match instance
+        final Player player = getValidPlayer();
+        final Match match = new Match(player);
+
+        // When calling Match.getFirstPlayer
+        final Player playerOne = match.getFirstPlayer();
+
+        // Then the first player is the same as the player given in the constructor
+        Assert.assertEquals("Player One was not equal to the constructor Player",
+                player, playerOne);
+    }
+
+    @Test
+    public void tooManyPlayersException() {
+        // Given a valid Match instance
+        final Match match = newInstance();
+
+        thrown.expect(MatchIsFullException.class);
+        thrown.expectMessage(getMatchIsFullExceptionMessage(match.getMatchId()));
+
+        // When calling Match.addPlayer five times
+        for (int i = 0; i < 5; i ++) {
+            match.addPlayer(getValidPlayer());
+        }
+
+        // Then on the fifth player being added a MatchIsFullException will be thrown
+    }
+
+    @Test
+    public void addingPlayers() {
+        // Given an array of 5 players and a newly created Match instance
+        final Player[] players = new Player[5];
+        for (int i = 0; i < 5; i ++) {
+            players[i] = getValidPlayer();
+        }
+        final Match match = new Match(players[0]);
+
+        // When adding the rest of the players;
+        for (int i = 1; i < 5; i ++) {
+            match.addPlayer(players[i]);
+        }
+
+        // Then all of the players will be added in the correct spot
+        final Player[] matchPlayers = match.getPlayers();
+        for (int i = 0; i < 5; i ++) {
+            Assert.assertEquals("The players at location [" + i + "] were not the same",
+                    players[i], matchPlayers[i]);
+        }
     }
 }
